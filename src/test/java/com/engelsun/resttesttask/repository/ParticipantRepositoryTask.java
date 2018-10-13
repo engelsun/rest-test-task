@@ -1,8 +1,8 @@
 package com.engelsun.resttesttask.repository;
 
+import com.engelsun.resttesttask.TaskUtil;
 import com.engelsun.resttesttask.entity.Participant;
 import com.engelsun.resttesttask.entity.Task;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;

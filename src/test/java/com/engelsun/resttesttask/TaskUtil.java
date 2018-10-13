@@ -1,13 +1,13 @@
-package com.engelsun.resttesttask.repository;
+package com.engelsun.resttesttask;
 
 import com.engelsun.resttesttask.entity.Participant;
 import com.engelsun.resttesttask.entity.Task;
 
 import java.time.LocalDate;
 
-class TaskUtil {
+public class TaskUtil {
 
-    static Task initTask() {
+    public static Task initTask() {
         Task task = new Task();
         task.setName("Another Task");
         task.setBeginDate(LocalDate.of(2018, 7, 23));
@@ -15,7 +15,7 @@ class TaskUtil {
         return task;
     }
 
-    static void addParticipantsToTask(Task task) {
+     public static void addParticipantsToTask(Task task) {
         Participant p1 = new Participant();
         p1.setId(1);
         p1.setName("Светлана");
