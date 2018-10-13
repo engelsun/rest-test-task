@@ -26,21 +26,11 @@ public class TaskRepositoryTest {
 
     @Before
     public void initTask() {
-        task = new Task();
-        task.setName("Another Task");
-        task.setBeginDate(LocalDate.of(2018, 7, 23));
-        task.setEndDate(LocalDate.of(2018, 7, 24));
+        task = TaskUtil.initTask();
     }
 
     private void addParticipantsToTask() {
-        Participant p1 = new Participant();
-        p1.setId(1);
-        p1.setName("Светлана");
-        Participant p2 = new Participant();
-        p2.setId(3);
-        p2.setName("Андрей");
-        task.getParticipants().add(p1);
-        task.getParticipants().add(p2);
+        TaskUtil.addParticipantsToTask(task);
     }
 
     @Test
@@ -52,7 +42,6 @@ public class TaskRepositoryTest {
     @Test
     public void findOneWithoutParticipants() {
         Task savedTask = taskRepository.save(task);
-
         Task foundTask = taskRepository.findOne(savedTask.getId());
 
         assertEquals(savedTask, foundTask);
@@ -69,7 +58,7 @@ public class TaskRepositoryTest {
         assertEquals(savedTask, foundTask);
         assertEquals(2, foundTask.getParticipants().size());
     }
-    
+
     @Test
     public void saveWithoutParticipants() {
         Task savedTask = taskRepository.save(task);
