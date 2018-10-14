@@ -1,5 +1,6 @@
 package com.engelsun.resttesttask.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,10 +18,8 @@ public class Participant {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "PARTICIPANTS_TASKS",
-            joinColumns = @JoinColumn(name = "PARTICIPANT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "TASK_ID"))
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "participants")
     @ToString.Exclude @EqualsAndHashCode.Exclude
-    private List<Participant> tasks = new ArrayList<>();
+    @JsonIgnore
+    private List<Task> tasks = new ArrayList<>();
 }

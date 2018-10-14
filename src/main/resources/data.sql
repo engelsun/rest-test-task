@@ -8,9 +8,9 @@ INSERT INTO participant (id, name) VALUES
   (4, 'Роман'),
   (5, 'Владимир');
 
-INSERT INTO participants_tasks (participant_id, task_id) VALUES
+INSERT INTO tasks_participants (task_id, participant_id) VALUES
   (1, 1),
-  (2, 1),
-  (3, 1),
-  (4, 2),
-  (5, 2);
+  (1, 2),
+  (1, 3),
+  (2, 4),
+  (2, 5);
