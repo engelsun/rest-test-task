@@ -2,7 +2,7 @@ package com.engelsun.resttesttask.controller;
 
 import com.engelsun.resttesttask.entity.Participant;
 import com.engelsun.resttesttask.entity.Task;
-import com.engelsun.resttesttask.repository.ParticipantRepository;
+import com.engelsun.resttesttask.service.ParticipantService;
 import com.engelsun.resttesttask.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
     @Autowired
-    private ParticipantRepository participantRepository;
+    private ParticipantService participantService;
 
     @GetMapping()
     public List<Task> getAll() {
@@ -46,6 +46,6 @@ public class TaskController {
 
     @GetMapping("/participants")
     public List<Participant> getAvailableParticipants() {
-        return participantRepository.findAll();
+        return participantService.findAll();
     }
 }

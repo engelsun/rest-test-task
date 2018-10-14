@@ -3,6 +3,7 @@ package com.engelsun.resttesttask.service;
 import com.engelsun.resttesttask.TaskUtil;
 import com.engelsun.resttesttask.entity.Participant;
 import com.engelsun.resttesttask.entity.Task;
+import com.engelsun.resttesttask.exception.IllegalPeriodException;
 import com.engelsun.resttesttask.exception.IllegalSelectedParticipantsException;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +42,9 @@ public class TaskServiceTest {
     private void processExceptionIfThrownOrAdd(String ...names) {
         try {
             taskService.add(task);
+        } catch (IllegalPeriodException ex) {
+            System.out.println(ex.getMessage());
+            assertTrue(ex.getMessage().equals(IllegalPeriodException.MASSAGE));
         } catch (IllegalSelectedParticipantsException ex) {
             System.out.println(ex.getMessage());
             assertTrue(ex.getMessage().contains("Светлана"));
@@ -75,6 +79,20 @@ public class TaskServiceTest {
         int tasksCount = taskService.findAll().size();
 
         assertEquals(3, tasksCount);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void addWhenBeginDateAfterEndDate() {
+        task = initTaskWithCustomPeriodAndParticipants(
+                LocalDate.of(2018, 8, 1),
+                LocalDate.of(2018, 7, 10));
+
+        processExceptionIfThrownOrAdd();
+
+        int tasksCount = taskService.findAll().size();
+
+        assertEquals(2, tasksCount);
     }
 
     @Test
