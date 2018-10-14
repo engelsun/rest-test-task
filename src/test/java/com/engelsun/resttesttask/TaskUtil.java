@@ -15,6 +15,14 @@ public class TaskUtil {
         return task;
     }
 
+    public static Task initTaskWithCustomPeriod(LocalDate beginDate, LocalDate endDate) {
+        Task task = new Task();
+        task.setName("Another Task");
+        task.setBeginDate(beginDate);
+        task.setEndDate(endDate);
+        return task;
+    }
+
      public static void addParticipantsToTask(Task task) {
         Participant p1 = new Participant();
         p1.setId(1);
