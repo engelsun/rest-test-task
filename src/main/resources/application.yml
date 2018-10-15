@@ -14,6 +14,8 @@ spring:
         show_sql: true
         use_sql_comments: true
         format_sql: true
+  mvc:
+    throw-exception-if-no-handler-found: true
 
 h2:
   console:

@@ -4,12 +4,13 @@ import com.engelsun.resttesttask.entity.Task;
 import com.engelsun.resttesttask.exception.IllegalPeriodException;
 import com.engelsun.resttesttask.exception.IllegalSelectedParticipantsException;
 import com.engelsun.resttesttask.repository.TaskRepository;
-import com.engelsun.resttesttask.exception.IllegalSelectedParticipantsExceptionMassageProperty;
+import com.engelsun.resttesttask.dto.BusyParticipant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,10 +31,10 @@ public class TaskService {
 
             throwExceptionIfInvalidPeriod(task.getBeginDate(), task.getEndDate());
 
-            List<IllegalSelectedParticipantsExceptionMassageProperty> exceptionMassageProperties = checkOnOverlappedPeriods(task);
+            List<BusyParticipant> busyParticipants = checkOnOverlappedPeriods(task);
 
-            if (exceptionMassageProperties.size() > 0) {
-                processException(exceptionMassageProperties);
+            if (busyParticipants.size() > 0) {
+                processException(busyParticipants);
             } else {
                 taskRepository.save(task);
             }
@@ -46,32 +47,34 @@ public class TaskService {
         }
     }
 
-    private List<IllegalSelectedParticipantsExceptionMassageProperty> checkOnOverlappedPeriods(Task task) {
+    private List<BusyParticipant> checkOnOverlappedPeriods(Task task) {
         List<Task> filteredTasks = taskRepository.findAllByOverlappedPeriods(task.getBeginDate(), task.getEndDate());
-        List<IllegalSelectedParticipantsExceptionMassageProperty> illegalSelectedParticipantNames = new ArrayList<>();
+        List<BusyParticipant> busyParticipants = new ArrayList<>();
 
         filteredTasks.forEach(t -> {
-            t.getParticipants().forEach(p -> {
-                if (task.getParticipants().contains(p)) {
-                    illegalSelectedParticipantNames.add(
-                            new IllegalSelectedParticipantsExceptionMassageProperty(t.getBeginDate(), t.getEndDate(), p.getName()));
+            t.getParticipants().forEach(participant -> {
+                if (task.getParticipants().contains(participant)) {
+                    busyParticipants.add(
+                            new BusyParticipant(participant.getName(), t.getBeginDate(), t.getEndDate()));
                 }
             });
         });
 
-        return illegalSelectedParticipantNames;
+        return busyParticipants;
     }
 
-    private void processException(List<IllegalSelectedParticipantsExceptionMassageProperty> exceptionMessageProperties) {
+    private void processException(List<BusyParticipant> busyParticipants) {
         StringBuilder sb = new StringBuilder();
-        sb.append("\nThe selected participants are working on others tasks during this period, please choose another period");
-        exceptionMessageProperties.forEach(massage -> {
+        sb.append("\n");
+        sb.append(IllegalSelectedParticipantsException.MASSAGE);
+        Collections.sort(busyParticipants);
+        busyParticipants.forEach(participant -> {
             sb.append("\n");
-            sb.append(massage.getParticipantName());
-            sb.append(" from ");
-            sb.append(massage.getTaskBeginDate());
-            sb.append(" to ");
-            sb.append(massage.getTaskEndDate());
+            sb.append(participant.getName());
+            sb.append(" busyFrom ");
+            sb.append(participant.getBusyFrom());
+            sb.append(" busyTo ");
+            sb.append(participant.getBusyTo());
         });
         throw new IllegalSelectedParticipantsException(sb.toString());
     }
