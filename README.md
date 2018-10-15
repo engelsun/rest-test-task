@@ -1,13 +1,17 @@
 # Rest Test Task
 
-### How to run  (in my case, this way dosen't work, because the data is saving in DB with the wrong encoding, but if i just run the RestTestTaskApplication class in IDE all works fine):
+### How to run:
 #### 1. Clone the project
 #### 2. Open the console from the root project directory
-#### 3. Execute the command: 
+#### 3. If your platform encoding is not UTF-8 (for example Cp1252), then execute next command, otherwise skip this step:
+```
+set MAVEN_OPTS= -Dfile.encoding=UTF-8
+```
+#### 4. Execute the command: 
 ```
 mvn spring-boot:run
 ```
-#### 4. Then you can test HTTP requests in a browser or Postman with url's:
+#### 5. Then you can test HTTP requests in a browser or Postman with url's:
 ```
 GET     http://localhost:8080/tasks
 GET     http://localhost:8080/tasks/participants       
